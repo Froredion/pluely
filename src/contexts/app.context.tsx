@@ -4,7 +4,7 @@ import {
   SPEECH_TO_TEXT_PROVIDERS,
   STORAGE_KEYS,
 } from "@/config";
-import { getPlatform, safeLocalStorage, trackAppStart } from "@/lib";
+import { getPlatform, safeLocalStorage } from "@/lib";
 import { getShortcutsConfig } from "@/lib/storage";
 import {
   getCustomizableState,
@@ -331,17 +331,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const initializeApp = async () => {
       // Load license and data
       await getActiveLicenseStatus();
-
-      // Track app start
-      try {
-        const appVersion = await invoke<string>("get_app_version");
-        const storage = await invoke<{
-          instance_id: string;
-        }>("secure_storage_get");
-        await trackAppStart(appVersion, storage.instance_id || "");
-      } catch (error) {
-        console.debug("Failed to track app start:", error);
-      }
     };
     // Load data
     loadData();
